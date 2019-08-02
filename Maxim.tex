@@ -1,0 +1,400 @@
+\documentclass[]{article}
+\newtheorem{theorem}{Theorem}%[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{claim}[theorem]{Claim}
+%\newtheorem{proof}[theorem]{Lemma}
+\newtheorem{conj}[theorem]{Conjecture}
+\usepackage{amssymb}
+
+\usepackage{amsmath,graphicx}%,amssymb,amsfonts,graphicx,wrapfig}
+
+
+%opening
+\title{Weak saturation in random graphs: working notes}
+\author{Mohamad Reza Bidgoli, Maksim Zhukovskii}
+
+\begin{document}
+
+\maketitle
+
+%\begin{abstract}
+%By infection process, we mean triangle bootstrap percolation throughout this paper.
+%\end{abstract}
+
+\section{Introduction}
+Let $H$ be a spanning subgraph of a connected graph $G$. {\it An infection process} on $G$ starting at $H$ is a maximal sequence of subgraphs $H = H_0 \subset H_1 \subset \ldots \subset H_m =: \langle H \rangle$ such that, every
+$H_i$ has one more edge than $H_{i-1}$, and there is a triangle in $H_i$ containing this edge. We say that {\it $H$ infects $G$}, if $\langle H \rangle =G$. Following~\cite{Sudakov}, we denote the minimum number of edges of a graph $H$ infecting $G$ by w-sat$(G,K_3)$ and call it the {\it weak $K_3$-saturation number}. 
+
+Notice that w-sat$(G,K_3)$ can not be less than $n-1$ since, for disconnected $H$, $\langle H\rangle$ is also disconnected. Therefore, whatever connected graph $G$ is, w-sat$(G,K_3)\geq n-1$. It is obvious that w-sat$(K_n,K_3)=n-1$ (we may start an infection process from a spanning substar). Unexpectedly, w-sat is stable: if we remove edges from $K_n$ independently with constant probability, the weak saturation number does not change. This result was proven by D. Kor\'{a}ndi and B. Sudakov in~\cite{Sudakov}.
+
+\begin{theorem}[\cite{Sudakov}]
+For constant $p$, a.a.s. w-sat$(G(n,p),K_3)=n-1$.
+\end{theorem}
+
+They also noticed that the same is true for $n^{-\varepsilon}\leq p\leq 1$ for certain small enough $\varepsilon>0$ and ask about smaller $p$ and about possible threshold for the property w-sat$(G(n,p),K_3)=n-1$.
+
+In Section~\ref{upper}, we prove that, for $p \geq 2n^{-1/3} (\ln n)^{1/3}$, a.a.s. w-sat$(G(n,p),K_3)=n-1$. In Section~\ref{lower}, we prove that a.a.s. it is not true for $p<n^{-1/3+o(1)}$ [{\bf This is in progress}]. In Section~\ref{threshold} we prove that a threshold for the considered property exists [{\bf This is also in progress}]. From this, we conclude that this threshold equals $n^{-1/3+o(1)}$.
+
+\section{Trivial lower bounds}
+\label{trivial}
+
+Clearly, if $p\leq\frac{\ln n}{n}$, then a.a.s. w-sat$(G(n,p),K_3)>n-1$, since, with positive asymptotical probability, the random graph is disconnected (see, e.g.,~\cite{Bollobas}, Theorem 7.3).\\
+
+Let us also notice that if a spanning subtree $T$ of a connected graph $G$ has an edge $e$ such that there is no triangle in $G$ containing this edge, then $T$ can not infect $G$ (otherwise, $T\setminus e$ should also infect $G$ which is impossible).  Then, if, in $G$, there is at least one edge $e$ and no triangles containing $e$, then there is no $T$ such that $\langle T\rangle = G$. Indeed, if such a $T$ exists, then $e$ does not belong to $T$. But then $e$ can not be infected.
+
+This leads to the following question. Is there an edge in $G(n,p)$ such that its endpoints do not have a common neighbor? It is known~\cite{Spencer_extensions} that there exists $C$ such that, for $p>C\sqrt{\frac{\ln n}{n}}$, a.a.s., there are no such edges in $G(n,p)$. It is an easy exercise to show that the above is true for every $C>\sqrt{3/2}$.
+
+This is because the expected number of `bad' edges (having no common neighbors) equals ${n\choose 2}p(1-p^2)^{n-2}$ and tends to $0$ for $p$ as above. 
+
+In contrast, if $\frac{\ln n}{n}<p\leq\sqrt{\frac{3\ln n}{2n}}$, then this expectation is at least 
+$$
+\frac{n^2p}{3}e^{-p^2n}=e^{2\ln n+\ln p-p^2n-\ln 3}\geq e^{2\ln n+\frac{1}{2}\ln\frac{3\ln n}{2n}-\frac{3\ln n}{2}-\ln 3}=
+\sqrt{\frac{\ln n}{6}}.
+$$
+
+Using the second moment approach, it is straightforward to show that, in the above settings, a.a.s. there exists at least one `bad' edge in $G(n,p)$. So, a.a.s. w-sat$(G(n,p),K_3)>n-1$.\\
+
+We conclude that, for $p\leq\sqrt{\frac{3\ln n}{2n}}$, a.a.s. w-sat$(G(n,p),K_3)>n-1$. 
+
+But how large is this value? It is close to $n-1$? Or, maybe, to the total number of edges in $G(n,p)$?
+
+By the same argument, if $p\ll n^{-1/2}$, almost all edges are `bad', and so, a.a.s. w-sat$(G(n,p),K_3)\sim e(G(n,p))$. 
+
+In the next section, we show that, for $p\geq 2\left(\frac{\ln n}{n}\right)^{1/3}$, a.a.s. w-sat$(G(n,p),K_3)=n-1$. 
+
+The question is, what happens in the range between $n^{-1/2+o(1)}$ and $n^{-1/3+o(1)}$. Could w-sat$(G(n,p),K_3)$ be much less than $e(G(n,p))$ if $p$ is (slightly) bigger than $n^{-1/2+o(1)}$? Could it be much bigger than $n$ if $p$ is slightly smaller than $n^{-1/3+o(1)}$? We do not know the answer. However, in Section~\ref{between}, we show that, for $p>n^{-5/2+o(1)}$, a.a.s. w-sat$(G(n,p),K_3)<(2+\varepsilon)p e(G(n,p))$.
+
+%Moreover, if $$
+
+%$n\sqrt{n\ln n}n^{-C^2}=e^{(3/2-C^2)\ln n+1/2 \ln \ln n}$.
+ 
+ 
+ \section{Upper Bound}
+ \label{upper}
+ 
+ Everywhere in this section, for a tuple of vertices $\mathbf{v}$, we denote $N_G(\mathbf{v})$ the set of common neighbors of vertices from $\mathbf{v}$ in $G$ and $e(G)$ the number of edges in $G$.
+ 
+ We call a graph {\it vulnerable}, if the following holds.
+ 
+\begin{itemize}
+	\item  Every three vertices have a common neighbor.
+	\item The common neighborhood of every two vertices is a non-empty connected graph.
+\end{itemize} 
+
+For $\mu\in\mathbb{N}$, we call a graph $G$ {\it $\mu$-dense}, if there exists a spanning rooted subtree $T\subset G$ with depth $\mu$ ({\it depth} of a rooted tree is the maximum distance between its root and a leaf) such that $\langle T\rangle=G$.
+Clearly, $K_n$ is $1$-dense. However, a graph having maximum degree less than $n-1$ is not $1$-dense. %(since a neighborhood of a vertex $v$ does not contain all vertices of the graph, and so, the subgraph of $G(n,p)$ on the vertex set $\{1,\ldots,n\}\setminus\{v\}$ and the set of edges containing only edges between neighbors of $v$ is disconnected). 
+Thus, a.a.s. $G(n,p\leq 1-\varepsilon)$ is not $1$-dense. However, from the next two lemmas, it follows that a.a.s. $G(n,p\geq 2n^{-1/3} (\ln n)^{1/3})$ is $2$-dense.
+
+\begin{lemma}
+	For every vulnerable graph $G$ of order $n$, $G$ is $2$-dense.
+\label{lem_upper}
+\end{lemma}
+
+{\it Proof}. Fix an arbitrary vertex $r$ of $G$. Define graph $H$ with the same vertices as $G$, as follows:
+
+For every vertex $v\in N_G(r)$, draw an edge between $v$ and $r$, and, for every vertex $v\in U_r:=V(G)\setminus [N_G(r)\cup\{r\}]$, draw an edge between $v$ and its arbitrary neighbor (we denote it by $\eta(v)$0 from $N_G(r)$ in $G$ (such a vertex exists since the diameter of $G$ is at most 2). 
+
+Clearly, $e(H)=n-1$. Let us prove that $H$ infects $G$. 
+
+Note that every edge inside $N_G(r)$ is infected. For every $v \in U_r$, consider a spanning subtree of $G|_{N_G(v,r)}$ rooted at $\eta(v)$. Since this tree is already infected and the edge connecting $v$ to $\eta(v)$ is also infected (since it belongs to $H$), all edges between $v$ and $N_G(r)$ are infected as well. Continuing the same argument, we may infect all the edges between $N_G(r)$ and $U_r$.
+
+So, it remains to show that every edge $\{u,v\}$ with both vertices inside $U_r$ is infected. By the first property of $G$, there exist a vertex $w \in N_G(u,v,r)$. Since both $\{u,w\}$ and $\{v,w\}$ are already infected, $\{u,v\}$ also becomes infected. $\Box$\\
+
+We immediately get that, for every vulnerable $G$, w-sat$(G,K_3)=n-1$.\\
+
+
+{\it Remark}. The first condition in Lemma~\ref{lem_upper} can be relaxed but has been added due to simplicity. 
+
+[{\bf Maksim}: \underline{how can it be relaxed and why do we need this remark?}]
+
+
+\begin{lemma}
+	For $p\geq 2(\ln n/n)^{\frac 13}$, a.a.s. $G_{n,p}$ is vulnerable.
+\end{lemma}
+
+{\it Proof}. By Theorem~2 from~\cite{Spencer_extensions}, a.a.s. every three vertices of $G(n,p)$ have a common neighbor.
+
+Let us switch to the second condition. Let $1\geq p_0\geq\frac{14\ln n}{n}$. Since connectedness is monotone property, it is obvious that $G_{n,p_0}$ is disconnected with the probability at most $\frac{e+o(1)}{n^6}$. Indeed, this probability is at most
+$$
+\sum_{k=1}^{n/2}{n\choose k}\left(1-\frac{14\ln n}{n}\right)^{k(n-k)}\leq \sum_{k=1}^{n/2} n^k e^{-14\ln n k(n-k)/n}\leq
+$$
+$$
+\sum_{k=1}^{n/2} e^{k(\ln n-7\ln n)}=\frac{e}{n^6}(1+o(1)).
+$$
+Let us fix two vertices of $G(n,p)$ and estimate the probability that they have more that $2np^2$ common neighbors. This probability equals ${\sf P}(\xi>2np^2)$, where $\xi$ has binomial distribution with parameters $n-2$ and $p^2$. By Chernoff inequality, ${\sf P}(\xi>2np^2)\leq e^{-3np^2/8}\leq e^{-3(n\ln^2 n)^{1/3}/2}$.
+
+Notice that, if $n_1\leq n_2$, then the probability that $G(n_2,p)$ is connected is at most the probability that $G(n_1,p)$ is connected (consider the respective random graph process and use the fact that a subgraph of a connected graph is connected as well). Therefore, there exists a pair of vertices such that their common neighborhood is not connected with probability at most
+$$
+ {n\choose 2}\biggl[e^{-3(n\ln^2 n)^{1/3}/2}+{\sf P}\biggl(G(\lfloor 2np^2\rfloor,p)\text{ is disconnected}\biggr)\biggr]<
+$$
+$$
+n^2\left[e^{-3(n\ln^2 n)^{1/3}/2}+\frac{e}{(2np^2)^6}(1+o(1))\right]=o(1).\quad\Box
+$$
+
+%$\Box$\\
+
+{\it Remark}. The constant in front of $(\ln n/n)^{\frac 13}$ can be improved (notice that a sharp threshold for connectedness is $\frac{\ln n}{n}$).\\
+
+So, we have just proved that a.a.s. $G(n,p)$ is 2-dense, if $p\geq 2(\ln n/n)^{\frac 13}$. A natural question to ask is is it true for smaller $p$? In Section~\ref{lower}, we show that this is untrue for $p\ll n^{-1/3}$.
+
+
+%{\bf why?}
+
+\section{Between the trivial lower bound and the upper bound}
+\label{between}
+
+Clearly, if a graph $G$ is 2-dense, then it contains a vertex $v$ such that the spanning subgraph $H\subset G$ containing all edges (and no others) $\{x,y\}$ such that either $x=v$ or $x\in N_G(v)$ infects $G$. If the latter happens, we will call $G$ {\it strongly 2-dense}.
+
+\begin{theorem}
+If there exists $\varepsilon>0$ such that $\sqrt{\frac{3\ln n}{2n}}\leq p\leq n^{-2/5-\varepsilon}$, then a.a.s. $G(n,p)$ is not strongly 2-dense. If there exists $\varepsilon>0$ such that $p>n^{-2/5+\varepsilon}$, then a.a.s. $G(n,p)$ is strongly 2-dense.
+\label{strongly_dense}
+\end{theorem}
+
+{\it Proof.} First, assume that $\sqrt{\frac{3\ln n}{2n}}\leq p\leq n^{-2/5-\varepsilon}$. Choose $\varepsilon$ as small as desired.\\ %Denote $f(n)=n^{-2/5}/p(n)$. By our assumption, $f(n)\geq n^{\varepsilon}$.\\
+
+
+
+Given $G$ and a spanning subgraph $H\subset G$, we will denote by $\langle H\rangle_1$ a spanning subgraph of $G$ containing all edges of $H$ and all edges $\{x,y\}$ of $G$ such that there exists a vertex $z$ with edges $\{z,x\}$, $\{z,y\}$ from $E(H)$. For $i=2,3,\ldots$, let $\langle H\rangle_i=\langle\langle H\rangle_{i-1}\rangle_1$. Clearly, if $\langle H\rangle =G$, then there exists $i$ such that $\langle H\rangle_i=G$. Let us denote by $e_i(G,H)$ the number of edges in 
+$$
+E(\langle H\rangle_i)\setminus E(\langle H\rangle_{i-1})=:E_i(G,H),
+$$
+where $\langle H\rangle_0:=H$.\\
+
+For $\gamma\in\{1,\ldots,n\}$, consider the spanning subgraph $H_{\gamma}$ of $G:=G(n,p)$ containing all edges (and no others) $\{x,y\}$ such that either $x=\gamma$ or $x\in N_G(\gamma)$. 
+
+Let us fix $i\in\mathbb{N}$ and estimate the probability that $e_i:=e_i(G,H_{\gamma})<\frac{n^{1-\varepsilon}}{p}$.
+
+By the Chernoff inequality, with probability at most $e^{-\frac{3}{8}np(1+o(1))}$, the number of neighbors of $1$ is at least $2np$. Then, with probability at least $1-ne^{-\frac{3}{8}np(1+o(1))}=1-e^{-\frac{3}{8}np(1+o(1))}$, the maximum degree of $G$ is at most $2np$.
+
+Let $u\in\{1,\ldots,n\}\setminus\{\gamma\}$. By the Chernoff inequality, with probability at most $e^{-2np^2}\leq n^{-3}$, the number of common neighbors of $1$ and $u$ is at least $3np^2$. Let $d_i(u)$ be the number of edges containing $u$ in $E_i:=E_i(G,H_{\gamma})$. Obviously, $d_i(u)=0$ for all $u\notin N_G(\gamma)\cup\{\gamma\}$. 
+
+Clearly, with probability at least $1-n^{-3}-e^{-\frac{3}{8}np(1+o(1))}$, $d_1(u)\leq\xi$, where $\xi$ has binomial distribution with parameters $6n^2p^3$ and $p$. By the Chernoff inequality, this random variable is bigger than $3n^2p^4$ with probability at most $e^{-2n^2p^4}\leq n^{-9/2}$. 
+
+We conclude that, with probability at least $1-n^{-2}(1+o(1))$, 
+$$
+\Delta_1:=\max_u d_1(u)\leq 3n^2p^4=\frac{3}{pn^{5\varepsilon}}.
+$$
+
+
+
+Let us assume that, with probability at least $1-n^{-2}(1+o(1))$, for every vertex $u$ and every $j\in\{1,\ldots,i-1\}$, $d_j(u)\leq \frac{1}{p n^{(j+1)\varepsilon}}$. 
+
+Let $d^*_i(u)=\sum_{j=1}^i d_j(u)$. Moreover, let $\Delta_i=\max_u d_i(u)$ and $\Delta_i^*=\max_u d_i^*(u)$. Since at every step of the infection process, we look on all pairs of infected edges that share one vertex and `check' if the other two vertices are adjacent or not, all these adjacencies were not considered before and, consequently, are independent of the previously considered adjacencies. Then, for every $u\notin [N_G(\gamma)\cup\{\gamma\}]$,  $d_i(u)\leq\xi$, where $\xi$ has binomial distribution with parameters $2\Delta_i^*\Delta_i$ and $p$. Then, by the Chernoff inequality, with the probability at least $1-n^{-2}(1+o(1))-ne^{-\frac{3}{2}\frac{1}{p n^{(i+1)\varepsilon}}(1+o(1))}$, $\Delta_i\leq\frac{1}{p n^{(i+1)\varepsilon}}$.
+
+Finally, we get that, for every $i\in\mathbb{N}$, with probability at least $1-n^{-2}(1+o(1))$, $e_i\leq n\Delta^*_i<\frac{n^{1-\varepsilon}}{p}$. Then, the probability that $e_i(G,H_{\gamma})\leq\frac{n^{1-\varepsilon}}{p}$ for every $\gamma\in\{1,\ldots,n\}$ is at least $1-n^{-1}(1+o(1))$.\\
+
+As we mentioned above, given $\gamma\in\{1,\ldots,n\}$, with probability at most $e^{-\frac{3}{8}np(1+o(1))}$, $\gamma$ has at least $2np$ neighbors in $G$. Then, by the Chernoff inequality, with probability at most $e^{-\frac{3}{8}np(1+o(1))}+e^{-\frac{1}{16}n^2p}=o(1/n)$, the number of edges between the vertices of $\{1,\ldots,n\}\setminus[N_G(\gamma)\cup\{\gamma\}]$ is at most $\frac{1}{4}n^2p$. Then, a.a.s., for all $\gamma\in\{1,\ldots,n\}$, the number of edges between the vertices of $\{1,\ldots,n\}\setminus[N_G(\gamma)\cup\{\gamma\}]$ is bigger than $\frac{1}{4}n^2p\gg\frac{n}{p}$.
+
+Summing up, for every $i\in\mathbb{N}$, a.a.s. there is no $u$ such that $\langle H_u\rangle_i=G$.\\
+
+So, for $G$ to be infected by some $H_{\gamma}$, a.a.s. the infection process can not terminate in a bounded number of steps.
+
+We will call a tuple of vertices $(\gamma,x,y)$ {\it $i$-dense}, if there exists a sequence of triangles $D_1,\ldots,D_i$
+such that  
+\begin{itemize}
+\item $\{x,y\}$ belongs to the only triangle $D_i$;
+\item all the triangles are inside $\{1,\ldots,n\}\setminus[N_G(\gamma)\cup\{\gamma\}]$;
+\item $D_1=(x_1,y_1,z_1)$ (all the vertices of $D_1$ are called {\it lower}) and there exist vertices $w_1\in N_G(\gamma,z_1,x_1)$ and $t_1\in N_G(\gamma,z_1,y_1)$ (we call these vertices {\it upper}; the edges $\{z_1,x_1\}$, $\{z_1,y_1\}$ are called {\it initial});
+\item for every $j\in\{2,\ldots,i\}$,  $D_j=(x_j,y_j,z_j)$ (all the vertices or $D_j$ are called {\it lower}) with the edge $\{x_j,y_j\}$ that does not belong to $D_1\cup\ldots\cup D_{j-1}$ and there exist vertices $w_j,t_j\in N_G(\gamma)$ (we call these verticese {\it upper}) such that
+\begin{itemize}
+\item either $w_j\in N_G(x_j,y_j)$ (in this case, we call the edge $\{x_j,y_j\}$ {\it initial}), or the edge $\{x_j,y_j\}$ belongs to the union $D_1\cup\ldots\cup D_{j-1}$,
+\item either $t_j\in N_G(y_j,z_j)$ (the edge $\{y_j,z_j\}$ is {\it initial}), or the edge $\{y_j,z_j\}$ belongs to the union $D_1\cup\ldots\cup D_{j-1}$.
+\end{itemize} 
+\end{itemize}
+Then, whatever $i\in\mathbb{N}$ is, a.a.s. if $G$ is infected by some $H_{\gamma}$, then there should be an $i$-dense $(\gamma,x,y)$ such that it is not $j$-dense for any $j<i$. Let $D_1,\ldots,D_i$ be the respective triangles. Due to the minimality condition, the set of initial edges of $D_1\cup\ldots\cup D_i$ forms a connected spanning subgraph in $D_1\cup\ldots\cup D_i$. Moreover, these triangles can be ordered in a way such that every $D_j$ has at most one vertex outside $D_1\cup\ldots\cup D_{j-1}$. Then, $e(D_1\cup\ldots\cup D_i)\geq 2v(D_1\cup\ldots\cup D_i)-3$ and $v(D_1\cup\ldots\cup D_i)\leq i+2$. Finally, the number of not initial edges is exactly $i$. 
+
+Let us notice that, for given $i$, the number of possible (up to isomorphism) induced subgraphs on $\gamma,x_j,y_j,z_j,w_j,t_j,$ $j\in\{1,\ldots,i\}$, is bounded from above and depends only on $i$. In every such structure, we may find a spanning tree containing only initial edges, and remove all the other initial edges and respective vertices $w_j,t_j$. The obtained structure contains $v\leq i+2$ lower vertices, $v-1$ initial edges, $i$ not initial edges between lower vertices and $v_0\leq v-1$ upper vertices. Clearly, all upper vertices are adjacent to $u$ and give at least $2v_0+(v-1-v_0)$ edges going to lower vertices in total. Thus, this structure has $v+v_0+1\leq 2v\leq 2i+4$ vertices and at least $2v-2+i+2v_0$ edges. Then {\it the density} (the number of edges divided by the number of vertices) of this structure is at least $\frac{2v-2+i+2v_0}{v+v_0+1}=2+\frac{i-4}{v+v_0+1}\geq 2+\frac{i-4}{2i+4}=\frac{5}{2}-\frac{3}{i+2}>\frac{1}{2/5+\varepsilon}$ for $i$ large enough. From~\cite{Bol_small,Vince} (see also~\cite{Bollobas}, Theorem 4.13), we get that a.a.s. there is no such structure in $G(n,p)$. This finishes the proof of the first part of Theorem~\ref{strongly_dense}.\\
+
+Let us switch to the second part of Theorem~\ref{strongly_dense}. Let $p>n^{-2/5+\varepsilon}$. Consider the spanning subgraph $H$ of $G:=G(n,p)$ containing all edges (and no others) $\{x,y\}$ such that either $x=1$ or $x\in N_G(1)$. Let us prove that a.a.s. $\langle H\rangle =G$. 
+
+\begin{figure}[h]
+\begin{center}
+\includegraphics[width=300pt]{bottom.png}
+\end{center}
+\caption{black edges are initially infected, red edge is infected in the last step}
+\label{Fig}
+\end{figure}
+
+Let $x,y$ be two vertices (see Figure~\ref{Fig}) outside $N_G(1)\cup\{1\}$. Then the $2k-1$ black vertices on Figure~\ref{Fig} bring $5k-2$ edges. Since $\frac{5k-2}{2k-1}<\frac{1}{2/5-\varepsilon}$ for $k$ large enough, there exists $k$, such that this extension (over vertices $x,y,1$) exists with asymptotical probability $1$ (see~\cite{Spencer_extensions}). It is easy to see that all blue edges can be infected by black edges. Then, the red edge can also be infected. $\Box$
+
+
+
+\section{Lower Bound}
+\label{lower}
+
+%\begin{conj}\label{diam}
+%	Let $G$ be a graph of diameter $2$. If a spanning tree can infect $G$, then there exist a rooted tree of depth $2$ that can also infect $G$.
+%\end{conj}
+
+
+
+%\begin{lemma}
+%	Fix $\epsilon>0$ and let  $G$ be a graph of diameter $2$ without any {\sl extension} of density greater than $3-\epsilon$. Then, infection process on $G$ starting by a spanning tree of depth two stops before step $8/\epsilon$.
+%\end{lemma}
+
+%{\it Proof}. Assume the infection process on graph $G$ starting at a spanning tree $T$. For every edge $e$ in $\langle T \rangle$, there exists an inclusion-minimum subgraph of $G$ containing $e$, say $F$, and a sequence $F_0\subset F_1\subset \ldots\subset F_r=F$ such that $F_0\subset T$ and for $i=1,\ldots,r$ $e_i=F_i-F_{i-1}$ is an edge of $G\setminus T$ whose endpoints have a common neighbor in $F_{i-1}$.
+
+
+%Note that the path between $u,v$ in $T$, say $P$, is included in $F_0$. Set $p=|P|$, $q=|F_0 \setminus P|$ and remind that $r$ is the number of steps in infection process. Notice that $p\leqslant 4$. Below, we prove that $r\geqslant p+2q$.\\
+
+%Let us consider the following iterative process $\mathbf{F}^1,\mathbf{F}^2,\ldots,$ where $\mathbf{F}^{\tau}=(F^{\tau}_1,\ldots,F^{\tau}_{r_{\tau}})$, $F_0^{\tau}\subset F_1^{\tau}\subset \ldots\subset F^{\tau}_{r_{\tau}}=F$, $F^0_{\tau}$ is a tree containing $P$, $F^1_i=F_i$, $i\in\{0,\ldots,r\}$, $r_1=r$.
+
+%At every step $\tau$, we either remove an edge from every graph in the current sequence and draw another one, either draw an edge and remove a vertex adjacent to both vertices of this edge and to at least one other vertex of $F^{\tau+1}_0$. Every new edge is taken from the set of edges $e_i$, $i\in\{1,\ldots,r\}$, and for any two steps $\tau,\tau+1$, the edge drawn at step $\tau+1$ appears in the sequence $(e_1,e_2,\ldots,e_r)$ later than the edge drawn at step $\tau$.
+
+%Let $F^1_i=F_i$, $i\in\{0,\ldots,r\}$, $r_1=r$. At step $\tau=1,2,\ldots$ we have a sequence $F_0^{\tau}\subset\ldots\subset F_{r_{\tau}}^{\tau}=F$ such that, for $i=1,\ldots,r_{\tau}$, $F^{\tau}_i-F^{\tau}_{i-1}$ is an edge $e^{\tau}_i=\{u^{\tau}_i,v^{\tau}_i\}$ of $G\setminus T$ whose endpoints have a common neighbor $z^{\tau}_i$ in $F^{\tau}_{i-1}$. 
+
+%At this step, find the minimum $i\in\{1,\ldots,r\}$ such that at least one edge of  $\{u^{\tau}_i,z^{\tau}_i\}$, $\{v^{\tau}_i,z^{\tau}_i\}$ does not belong to $P$ and does not belong to the set
+%$$
+%\biggl\{ \{u^{\tau}_j,z^{\tau}_j\},\{v^{\tau}_j,z^{\tau}_j\},\quad j\neq i\biggr\}\cup
+%\biggl\{ \{u^{\tau}_j,v^{\tau}_j\},\quad j<i\biggr\}
+%$$
+%(in other words, it neither infects any other edge nor is infected before). If there is no such an edge, the process terminates. Let such an edge exist (say, $\{u^{\tau}_i,z^{\tau}_i\}$).
+
+%If the edge $\{v^{\tau}_i,z^{\tau}_i\}$ either belongs to $P$, or infects other edges, or is infected before, then we simply set 
+
+%$F^{\tau+1}_j=F^{\tau}_j\cup e^{\tau}_i\setminus\{u^{\tau}_i,z^{\tau}_i\}$, for $j<i$, 
+
+%$F^{\tau+1}_j=F^{\tau}_{j+1}\setminus\{u^{\tau}_i,z^{\tau}_i\}$, for $j>i$,
+
+%$r_{\tau+1}=r_{\tau}-1$.\\
+
+%Otherwise, consider several scenarios.
+
+%\begin{enumerate}
+
+%\item $z^{\tau}_i=R$. This is impossible, since after removing the edges $\{v^{\tau}_i,z^{\tau}_i\}$ and $\{u^{\tau}_i,z^{\tau_i}\}$ from $F_0^{\tau}$ and adding the edge $\{u^{\tau}_i,v^{\tau}_i\}$, it becomes disconnected.
+
+%\item $u^{\tau}_i=R$ (or $v^{\tau}_i=R$). Notice that, by the property of the considered iterative process, the edge $\{v^{\tau}_i,u^{\tau}_i\}$ does not belong to $F_0$, that is impossible. 
+
+%\item $z^{\tau}_i$ adjacent to $R$ in $G$. Then we remove the vertex $z^{\tau}_i$ and draw the edge $\{u^{\tau}_i,v^{\tau}_i\}$. More formally,
+
+%$F^{\tau+1}_j=(F^{\tau}_j)\cup e^{\tau}_i)|_{V(F_{\tau_j})\setminus\{z^{\tau}_i\}}$, for $j<i$, 
+
+%$F^{\tau+1}_j=F^{\tau}_{j+1}|_{V(F_{\tau_j})\setminus\{z^{\tau}_i\}}$, for $j>i$,
+
+%$r_{\tau+1}=r_{\tau}-1$.
+
+%Clearly, in $F^{\tau}_0$, there are no edges adjacent t $z^{\tau}_i$ but $\{u^{\tau}_i,z^{\tau}_i\}$, $\{v^{\tau}_i,z^{\tau}_i\}$. Otherwise, the graph $F^{\tau}_0\cup e^{\tau}_i\setminus\{\{u^{\tau}_i,z^{\tau}_i\},\{v^{\tau}_i,z^{\tau}_i\}\}$ is disconnected, but it should infect the edge $w$, and all its edges should be exploited in the infection process.
+
+%\item $z^{\tau}_i$ is neither equal to $R$ nor adjacent to $R$ in $G$.
+
+%Clearly, as above (by connectedness argument), in $F^{\tau}_0$, there are no edges adjacent to $z^{\tau}_i$ but $\{u^{\tau}_i,z^{\tau}_i\}$, $\{v^{\tau}_i,z^{\tau}_i\}$. 
+
+%One of the two edges $\{v^{\tau}_i,z^{\tau}_i\}$ and $\{u^{\tau}_i,z^{\tau}_i\}$ (say, $\{v^{\tau}_i,z^{\tau}_i\}$) does not belong to $F_0$. Nevertheless, it belongs to $F^{\tau}_0$ since for a certain $\tilde\tau<\tau$, there exists $j$ such that $\{u^{\tilde\tau}_j,v^{\tilde\tau}_j\}=\{v^{\tau}_i,z^{\tau}_i\}$. Without loss of generality, assume that $z^{\tau}_i=v^{\tilde\tau}_j$. There are two options.
+
+%If, at step $\tilde\tau$, one edge is removed and one is drawn, then the removed edge should contain $z^{\tau}_i$ (otherwise, this edge should be exploited in the infection process further, and that means that it belongs to $F^{\tau}_0$). Then we remove the vertex $z^{\tau}_i$ and draw the edge $\{u^{\tau}_i,v^{\tau}_i\}$. Clearly, the vertex $z^{\tau}_i$ is adjacent to at least 3 vertices of $F^{\tau+1}_0$ in $G$.
+
+%If, at step $\tilde\tau$, a vertex is removed.
+
+
+%\end{enumerate}
+
+
+
+%For $i=0,\ldots,r$, consider $W_i \subset F_i$, the minimum walk between $u,v$ containing all edges that has not infected any other edges. Denote $|W_i|$ by $w_i$. We have $w_0=p+2q$ and due to minimality of $F$, $w_r=1$. So, it suffices to show that $w_i\geqslant w_{i-1}-1$ for $i=1,\ldots, r$. Towards a contradiction, suppose that $w_i \leqslant w_{i-1}-2$. Note that $W_i$ should contain the only edge $e_i\in E(F_i) \setminus E(F_{i-1})$. Let this edge connect vertices $u_i,v_i$. Then, there exists a vertex $z_i$ such that both edges $\{z_i,u_i\}$, $\{z_i,v_i\}$ belong to $F_{i-1}$. Consider several scenarios.
+
+%If none of $\{z_i,u_i\}$, $\{z_i,v_i\}$ belong to $W_{i-1}$, then $W_i$ contains all edges of $W_{i-1}$ and the edge $\{u_i,v_i\}$.
+
+%{\bf why?}
+
+%So, $r\geqslant p+2q$. Note that $F_0$ is a spanning tree of $F$. So, $|V(F)|=|V(F_0)|=|E(F_0)|+1=p+q+1$. On the other hand, $|E(F)|=p+q+r$. So, $F\setminus\{e\}$ is an extension in $G$ of density $\frac{p+q+r-1}{p+q+1}\geqslant\frac{2p+3q-1}{p+q+1}$ which is greater than $3-\epsilon$ for $q> \frac 8\epsilon$.
+
+%\newpage
+
+Here, we prove that if $p\ll n^{-1/3}$, then a.a.s. $G(n,p)$ is not 2-dense.
+
+We start from the following observation.
+
+\begin{claim}
+ Let $T$ be a rooted tree with depth $2$ such that $\langle T\rangle=G$. Then there exists a rooted tree $\tilde T$ with depth 2 such that the set of neighbors of the root in $\tilde T$ equals the set of its neighbors in $G$, and still $\langle \tilde T\rangle =G$.
+\label{all_neighbors}
+\end{claim} 
+
+{\it Proof.} Let $R$ be the root of $T$ and $v$ be a neighbor of $R$ in $G$ such that it is non-adjacent to $R$ in $T$. Since $T$ has depth $2$, there exists $u$ which is a common neighbor of $R,v$ in $T$. Clearly, the rooted tree obtained from $T$ by removing the edge $\{v,u\}$ and drawing the edge $\{R,v\}$ infects $G$ as well. In this way, we may move all the `bottom' neighbors of $R$ above. $\Box$
+
+\begin{lemma}
+Let $f(n)\uparrow\infty$ as $n\to\infty$ and $p(n)<n^{-1/3}/f(n)$. Then a.a.s. $G(n,p)$ is not 2-dense.
+	%let $p \ll n^{-\frac 13-o(1)}$, then $wsat(G_{n,p},\Delta)$
+%	Fix $\epsilon>0$ and let  $G$ be a graph of diameter $2$ without any {\sl extension} of density greater than $3-\epsilon$. Then, infection process on $G$ starting by a spanning tree of depth two stops before step $8/\epsilon$.
+\end{lemma}
+
+{\it Proof}. %Assume the infection process on graph $G$ starting at a spanning tree $T$. For every edge $e$ in $\langle T \rangle$, there exists an inclusion-minimum subgraph of $G$ containing $e$, say $F$, and a sequence $F_0\subset F_1\subset \ldots\subset F_r=F$ such that $F_0\subset T$ and for $i=1,\ldots,r$ $e_i=F_i-F_{i-1}$ is an edge of $G\setminus T$ whose endpoints have a common neighbor in $F_{i-1}$.
+By Theorem~\ref{strongly_dense}, it is sufficient to consider $p\gg\sqrt{\frac{\ln n}{n}}$.
+Let $\mathcal{D}$ be the event that every pair of vertices of $G:=G(n,p)$ have at least $\frac{1}{2}np^2$ common neighbors. 
+
+Given a pair of vertices of $G$, the number of common neighbors of this pair has binomial distribution with parameters $n-1$ and $p^2$. By the Chernoff inequality, the probability that this pair has less than $\frac{1}{2}np^2$ common neighbors is at most $e^{-\frac{1}{4}np^2(1+o(1))}\ll n^{-2}$. Then, ${\sf P}(\mathcal{D})\to 1$ as $n\to\infty$.\\
+
+Let us consider an arbitrary linear order $T_1<T_2<\ldots<T_M$ on the set of all rooted spanning subtrees of $K_n$ on $\{1,\ldots,n\}$ having depth $2$.  Let us prove that under the condition that certain trees do not infect $G$, the probability of $\{i_1\sim j_1,\ldots,i_s\sim j_s\}\cap\mathcal{D}$ (under certain conditions on the pairs of vertices $\{i_1,j_1\},\ldots,\{i_s,j_s\}$) is at most $p^s$.\\
+
+Let $\{i_1,j_1\},\ldots,\{i_s,j_s\}$ be pairs of vertices of $G$ such that every vertex of $G$ belongs to at most $\frac{1}{4}np^2$ pairs. Let $i\in\{1,\ldots,M\}$, $\mathcal{A}_i$ be the event that $T_i$ infects $G$, and $\mathcal{T}_i=\overline{\mathcal{A}_1\cup\ldots\cup \mathcal{A}_i}$.
+
+\begin{claim}
+${\sf P}(\{i_1\sim j_1,\ldots,i_s\sim j_s\}\cap\mathcal{D}|\mathcal{T}_i)\leq p^s$.
+\label{independence}
+\end{claim}
+
+{\it Proof.} Let $\mathcal{H}$ be the set of graphs $H$ on $\{1,\ldots,n\}$ with sets of edges containing $E_s:=\{\{i_1,j_1\},\ldots,\{i_s,j_s\}\}$ such that
+\begin{enumerate}
+\item $T_1,\ldots,T_{i-1}$ do not infect $H$,
+\item every pair of vertices of $H$ has at least $\frac{1}{2}np^2$ common neighbors in $H$.
+\end{enumerate} 
+Let $\mathcal{H}_0$ be the set of graphs $H$ on $\{1,\ldots,n\}$ such that either $H\cup E_s$ does not equal to any graph from $\mathcal{H}$ or the above property 2) does not hold, but $T_1,\ldots,T_{i-1}$ still do not infect $H$.
+
+Let $H$ be an arbitrary graph and $\mathcal{E}$ be a subset of the set of edges of $H$ such that every pair of vertices of the graph $H\setminus\mathcal{E}$ has a common neighbor, and a subgraph $T\subset H\setminus\mathcal{E}$ {\it does not} infect $H$. Then, clearly, $T$ does not infect $H\setminus\mathcal{E}$ as well. It means that, for every $H\in\mathcal{H}$ and every $E\subseteq E_s$, the graph $H\setminus E_s$ still have the property 1).
+
+Then,
+$$
+ {\sf P}(\{i_1\sim j_1,\ldots,i_s\sim j_s\}\cap\mathcal{D}|\mathcal{T}_i)=\frac{\sum_{H\in\mathcal{H}}{\sf P}(H)}{\frac{1}{p^s}\sum_{H\in\mathcal{H}}{\sf P}(H)+\sum_{H\in\mathcal{H}_0}{\sf P}(H)}\leq p^s.\quad \Box
+$$
+
+Clearly,
+$$
+ {\sf P}(\exists i\,\,\mathcal{A}_i)=\sum_{i=1}^M {\sf P}(\mathcal{A}_i\cap\mathcal{T}_{i-1})=\sum_{i=1}^M {\sf P}(\mathcal{A}_i|\mathcal{T}_{i-1}){\sf P}(\mathcal{T}_{i-1}),
+$$
+where $\mathcal{T}_0$ is, simply, the sample space. It remains to prove that ${\sf P}(\mathcal{A}_i|\mathcal{T}_{i-1})$ approaches $0$ uniformly over all $i$.
+
+Everywhere below, we consider the probability conditioned on $\mathcal{T}_{i-1}$.\\
+
+In the same way as in the proof of Theorem~\ref{strongly_dense}, given $H$ and a spanning subgraph $T\subset H$, we will denote by $\langle T\rangle_1$ a spanning subgraph of $H$ containing all edges of $T$ and all edges $\{x,y\}$ of $H$ such that there exists a vertex $z$ with edges $\{z,x\}$, $\{z,y\}$ from $E(T)$. For $i=2,3,\ldots$, let $\langle H\rangle_i=\langle\langle H\rangle_{i-1}\rangle_1$. Similarly, we define $e_i(H,T),E_i(H,T)$.\\
+
+Let $i\in\{1,\ldots,M\}$ and $\gamma$ be the root of $T_i$. By Claim~\ref{all_neighbors}, without loss of generality, we may assume that the set of children of $\gamma$ in $T_i$ equals the set of neighbors of $\gamma$ in $G$. Let $H_{\gamma}$ be the spanning subgraph of $G$ containing all edges of $T_i$ and all edges between the vertices of $N_G(\gamma)$. Let us fix $\ell\in\mathbb{N}$ and estimate the probability that $e_{\ell}:=e_{\ell}(G,H_{\gamma})<\frac{n}{f^i}$.
+
+Let $u\in\{1,\ldots,n\}\setminus(N_G(\gamma)\cup\{\gamma\})$. Let $d^{\downarrow}_i(u)$ be the number of edges $\{u,v\}$ from $E_i$ such that $v\notin N_G(\gamma)$ and $d^{\uparrow}_i(u)$ be the number of edges $\{u,v\}$ from $E_i$ such that $v\in N_G(\gamma)$. Let $\Delta^{\downarrow}_i=\max_u d^{\downarrow}_i(u)$, $\Delta^{\uparrow}_i=\max_u d_i^{\uparrow}(u)$. 
+
+Clearly, $d^{\downarrow}_1(u)=0$ and $d^{\uparrow}_1(u)$ is at most a binomial random variable with parameters $\Delta_2p$ and $p$. By the Chernoff inequality, the probability that $d^{\uparrow}_1(u)\leq C$ is at most ...
+
+Assume that ...
+
+Then, $d^{\downarrow}_i(u)$ is at most a binomial random variable with parameters $d^{\downarrow}_{i-1}(u)\Delta^{\downarrow,*}_{i-1}+d^{\downarrow,*}_{i-1}\Delta^{\downarrow}_{i-1}+d^{\uparrow}np$ and $p$
+
+
+
+
+\section{Existence of threshold}
+\label{threshold}
+
+\begin{thebibliography}{99}
+
+\bibitem{Bollobas} B. Bollob\'{a}s, {\it Random Graphs}, 2nd Edition, Cambridge University Press, 2001.
+
+\bibitem{Bol_small} B. Bollob\'{a}s, {\it Threshold functions for small subgraphs}, Math. Proc. Camb. Phil. Soc. 1981. Vol. 90. p.~197--206.
+
+
+\bibitem{Spencer_extensions} J. H. Spencer, {\it Threshold functions for extension statements},  J. of Comb. Th., Ser A. (1990) Vol. 53, p. 286--305.
+
+\bibitem{Sudakov}  D. Kor\'{a}ndi and B. Sudakov, {\it Saturation in random graphs},  Random Structures \& Algorithms (2017) Vol 51, Issue 1, p. 169--181.
+
+\bibitem{Vince} A. Ruci\'{n}ski, A. Vince, {\it Balanced graphs and the problem of subgraphs of a random graph}, Congressus Numerantim. 1985. Vol. 49. p.~181--190.
+
+
+
+
+\end{thebibliography}
+
+
+
+
+
+
+ 
+\end{document}
